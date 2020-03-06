@@ -1,0 +1,44 @@
+<%- include("../partials/header") %>
+
+<h1 id="profile-title"><%= user.username%>'s Profile</h1>
+
+<div id="profile">
+	<div class="row">
+	    <div class="col-md-6">
+			<div class="img-thumbnail" style="border: white; width: 100%;">
+			    <% if (currentUser && (user._id.equals(currentUser._id) || (currentUser.isAdmin))) { %>
+			    <h1 class="pull-right"><a class="btn btn-warning" href="/users/<%= user._id %>/edit">Edit</a></h1>
+			    <%	} %>
+			    <h2><%= user.firstName + " " + user.lastName %></h2>
+			</div>
+		    <div class="img-thumbnail" style="width: 100%;">
+			    <img src="<%= user.avatar %>" alt="user profile image">
+			    <div class="caption text-center"><a href="mailto: <%= user.email %>"><%= user.email %></a></div>
+		    </div>
+			<% if (!user.biography || user.biography.length === 0) { %>
+			    <form action="/users/<%= user._id %>?_method=PUT" method="POST">
+				    <div style="margin-top: 10px;">
+					     <textarea name="user[biography]" rows="8" style="width: 100%;" placeholder="biogrpahy"></textarea>
+				    </div>
+					<button class="btn btn-sm btn-primary">Add Bio</button>
+                </form>
+			<%	} else { %>
+			    <h3>Short Bio:</h3>
+			    <p id="biography"><%= user.biography %></p>
+			<%	} %>
+	    </div>
+		
+		<div class="container">
+	        <div class="col-md-5" style="margin-left: 50px;">
+		        <h3><%= user.username %>'s campgrounds:</h3>
+		        <ul>
+		        <% campgrounds.forEach(function(campground) { %>
+			       <li id="usercampground"><a href="/campgrounds/<%= campground.id %>"><%= campground.name %></a></li>
+		        <% }); %>
+		        </ul>
+			</div>
+	    </div>
+	</div>
+</div>
+
+<%- include("../partials/footer") %>
